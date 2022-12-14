@@ -9,17 +9,16 @@
 > \<VBE_StartInsertion>Bring Syrup</VBE_StartInsertion>\
 > \<VBE_StartInsertionDesc>Bring a syrup to the soda fountain to start processing</VBE_StartInsertionDesc>\
 > \<VBE_CancelBringingSyrup>Cancel Bringing Syrup</VBE_CancelBringingSyrup>\
-> \<VBE_CancelBringingSyrupDesc>Cancel bringing syrup to the soda fountain.</VBE_CancelBringingSyrupDesc>\
-> \<VBE_SyrupFailurePower>The soda has spoiled due to a power failure in the soda fountain</VBE_SyrupFailurePower>
+> \<VBE_CancelBringingSyrupDesc>Cancel bringing syrup to the soda fountain.</VBE_CancelBringingSyrupDesc>
 
 Обработанный текст:
 > \<!-- EN: Syrup to Insert -->\
-> \<VBE_StartInsertion>Syrup to Insert</VBE_StartInsertion>\
+> \<VBE_InsertSyrupDesc>Syrup to Insert</VBE_InsertSyrupDesc>\
 > \<!-- EN: Bring Syrup -->\
-> \<VBE_StartInsertionDesc>Bring Syrup</VBE_StartInsertionDesc>\
+> \<VBE_StartInsertion>Bring Syrup</VBE_StartInsertion>\
 > \<!-- EN: Bring a syrup to the soda fountain to start processing -->\
-> \<VBE_CancelBringingSyrup>Bring a syrup to the soda fountain to start processing</VBE_CancelBringingSyrup>\
+> \<VBE_StartInsertionDesc>Bring a syrup to the soda fountain to start processing</VBE_StartInsertionDesc>\
 > \<!-- EN: Cancel Bringing Syrup -->\
-> \<VBE_CancelBringingSyrupDesc>Cancel Bringing Syrup</VBE_CancelBringingSyrupDesc>\
+> \<VBE_CancelBringingSyrup>Cancel Bringing Syrup</VBE_CancelBringingSyrup>\
 > \<!-- EN: Cancel bringing syrup to the soda fountain. -->\
-> \<VBE_SyrupFailurePower>Cancel bringing syrup to the soda fountain.</VBE_SyrupFailurePower>
+> \<VBE_CancelBringingSyrupDesc>Cancel bringing syrup to the soda fountain.</VBE_CancelBringingSyrupDesc>

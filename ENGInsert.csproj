@@ -2,12 +2,37 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0-windows10.0.22621.0</TargetFramework>
+    <TargetFramework>net7.0-windows7.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<DebugType>full</DebugType>
-    <IsPublishable>False</IsPublishable>
+    <IsPublishable>True</IsPublishable>
     <AnalysisLevel>latest</AnalysisLevel>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <StartupObject>ENGInsert.Program</StartupObject>
+    <ApplicationIcon>лого.ico</ApplicationIcon>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
+    <PackageIcon>лого.png</PackageIcon>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="лого.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="лого.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

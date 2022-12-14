@@ -1,85 +1,67 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace ENGInsert
 {
     internal class Program
     {
-        internal static int Main()
+        internal static void Main()
         {
-            string[] allFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.xml", SearchOption.AllDirectories);
-            foreach (string tempFile in allFiles)
+            string[] AllFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.xml", SearchOption.AllDirectories);
+            StringComparison Comparison = StringComparison.InvariantCultureIgnoreCase;
+            foreach (string TempFile in AllFiles)
             {
-                if (tempFile.EndsWith("loadfolders.xml", StringComparison.InvariantCultureIgnoreCase) || tempFile.EndsWith("about.xml", StringComparison.InvariantCultureIgnoreCase) || tempFile.EndsWith("patch.xml", StringComparison.InvariantCultureIgnoreCase) || tempFile.EndsWith("temp.xml"))
+                if (TempFile.EndsWith("loadfolders.xml", Comparison) || TempFile.EndsWith("about.xml", Comparison) || TempFile.EndsWith("patch.xml", Comparison) || TempFile.EndsWith("temp.xml"))
                 {
-                    Console.WriteLine(tempFile);
-                    Console.WriteLine("Wrong File");
+                    Console.WriteLine(TempFile);
+                    Console.WriteLine("Will not be processed");
                 }
                 else
                 {
-                    Console.WriteLine(tempFile);
-                    XMLProcessing(tempFile);
+                    //Console.WriteLine(TempFile);
+                    XMLProcessing(TempFile);
+                    //Console.WriteLine("OK");
                 }
-                Console.WriteLine("Next");
 
             }
-            Console.WriteLine("End of Files");
-            return 0;
+            Console.WriteLine("Work is completed");
+            Console.ReadKey();
         }
-        internal static void XMLProcessing(string currentFile)
+
+        internal static void XMLProcessing(string CurrentFile)
         {
-            XmlReaderSettings readerSettings = new();
-            readerSettings.ConformanceLevel = ConformanceLevel.Fragment;
-            readerSettings.IgnoreWhitespace = true;
-            readerSettings.IgnoreComments = true;
-
-            XmlReader xDoc = XmlReader.Create(currentFile, readerSettings);
-            xDoc.MoveToContent();
-
-            XmlWriterSettings writerSettings = new();
-            writerSettings.Encoding.GetPreamble();
-            writerSettings.Indent = true;
-            writerSettings.NewLineOnAttributes = true;
-
-            XmlWriter xNewDoc = XmlWriter.Create("temp.xml", writerSettings);
-            xNewDoc.WriteStartElement("LanguageData");
-
-            xDoc.Read();
-            while (true)
+            XDocument xDoc = XDocument.Load(CurrentFile);
+            if (xDoc.Element("LanguageData") is null)
             {
-                if (xDoc.NodeType == XmlNodeType.Element)
-                {
-                    string content = xDoc.ReadInnerXml();
-
-                    string name = xDoc.Name;
-                    if (name == "LanguageData")
-                    {
-                        Console.WriteLine("End of text");
-                        break;
-                    }
-                    xNewDoc.WriteString("\n");
-                    xNewDoc.WriteString("  ");
-                    xNewDoc.WriteComment(" EN: " + content + " ");
-                    xNewDoc.WriteString("\n");
-                    xNewDoc.WriteString("  ");
-                    xNewDoc.WriteElementString(name, content);
-
-                }
-                else
-                {
-                    xNewDoc.WriteString("\n");
-                }
-
+                Console.WriteLine("Could not find LanguageData");
+                return;
             }
-            xDoc.Dispose();
-            xDoc.Close();
-            xNewDoc.WriteString("\n");
-            xNewDoc.WriteEndElement();
-            xNewDoc.Flush();
-            xNewDoc.Close();
-            File.Delete(currentFile);
-            File.Move("temp.xml", currentFile);
+            XElement? root = xDoc.Element("LanguageData");
+
+            XElement? lastnode = null;
+            foreach (XElement node in root.Elements())
+            {
+                string content = node.Value.ToString();
+                XRaw comment = new("\n  <!-- EN: " + content + " -->\n  ");
+                node.AddBeforeSelf(comment);
+                lastnode = node;
+            }
+            lastnode.AddAfterSelf("\n");
+
+            xDoc.Save(CurrentFile);
+        }
+
+        public class XRaw : XText
+        {
+            public XRaw(string text) : base(text) { }
+            public XRaw(XText text) : base(text) { }
+
+            public override void WriteTo(XmlWriter writer)
+            {
+                writer.WriteRaw(this.Value);
+            }
         }
     }
 }
