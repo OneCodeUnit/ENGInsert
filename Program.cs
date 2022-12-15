@@ -20,9 +20,7 @@ namespace ENGInsert
                 }
                 else
                 {
-                    //Console.WriteLine(TempFile);
                     XMLProcessing(TempFile);
-                    //Console.WriteLine("OK");
                 }
 
             }
@@ -32,28 +30,26 @@ namespace ENGInsert
 
         internal static void XMLProcessing(string CurrentFile)
         {
-            XDocument xDoc = XDocument.Load(CurrentFile);
+            XDocument xDoc = XDocument.Load(CurrentFile, LoadOptions.PreserveWhitespace);
             if (xDoc.Element("LanguageData") is null)
             {
                 Console.WriteLine("Could not find LanguageData");
                 return;
             }
-            XElement? root = xDoc.Element("LanguageData");
+            XElement root = xDoc.Element("LanguageData");
 
-            XElement? lastnode = null;
             foreach (XElement node in root.Elements())
             {
                 string content = node.Value.ToString();
-                XRaw comment = new("\n  <!-- EN: " + content + " -->\n  ");
+                XRaw comment = new("<!-- EN: " + content + " -->\n  ");
                 node.AddBeforeSelf(comment);
-                lastnode = node;
             }
-            lastnode.AddAfterSelf("\n");
+            root.LastNode?.AddAfterSelf("\n");
 
             xDoc.Save(CurrentFile);
         }
 
-        public class XRaw : XText
+        internal class XRaw : XText
         {
             public XRaw(string text) : base(text) { }
             public XRaw(XText text) : base(text) { }
