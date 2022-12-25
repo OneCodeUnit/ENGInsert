@@ -56,8 +56,11 @@ namespace ENGInsert
 
             foreach (XElement node in root.Elements())
             {
+                //Получение содержимого текущего тега
                 string content = node.Value;
+                //Создание комментария с ним
                 XRaw comment = new("<!-- EN: " + content + " -->\n  ");
+                //Добавление этого комментария перед текущим тегом
                 node.AddBeforeSelf(comment);
             }
             //Перенос строки перед закрывающим тегом LanguageData
