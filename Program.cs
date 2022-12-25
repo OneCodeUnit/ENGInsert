@@ -11,6 +11,7 @@ namespace ENGInsert
 
         internal static void Main()
         {
+            //Получение списка всех файлов в текущей директории и во всех вложенных подпапках за счёт SearchOption
             string[] AllFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.xml", SearchOption.AllDirectories);
             
             foreach (string TempFile in AllFiles)
@@ -26,6 +27,7 @@ namespace ENGInsert
 
         internal static void XMLProcessing(string CurrentFile)
         {
+            //Позволяет избежать падения при загрузке сломанного .xml файла
             try
             {
                 XDocument.Load(CurrentFile, LoadOptions.PreserveWhitespace);
@@ -40,6 +42,7 @@ namespace ENGInsert
             }
 
             XDocument xDoc = XDocument.Load(CurrentFile, LoadOptions.PreserveWhitespace);
+            //Позволяет избежать обработки пустого или не содержащего нужных тегов файла
             if (xDoc.Element("LanguageData") is null)
             {
                 Console.WriteLine(CurrentFile);
@@ -48,6 +51,7 @@ namespace ENGInsert
                 SkipCount++;
                 return;
             }
+            //Перевод контекста в содержимое тега LanguageData
             XElement root = xDoc.Element("LanguageData");
 
             foreach (XElement node in root.Elements())
@@ -56,6 +60,7 @@ namespace ENGInsert
                 XRaw comment = new("<!-- EN: " + content + " -->\n  ");
                 node.AddBeforeSelf(comment);
             }
+            //Перенос строки перед закрывающим тегом LanguageData
             root.LastNode?.AddAfterSelf("\n");
 
             xDoc.Save(CurrentFile);
